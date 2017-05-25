@@ -258,6 +258,7 @@ class Bootstrap implements BootstrapInterface
 
         $container->set(self::getSerializerId(), Serializer::class);
         $container->setSingleton(Serializer::class, function (Container $container, array $params, array $config) {
+            $config = array_merge($config, $params);
             $metadataFactory = $container->get(self::getMetadataFactoryId(), [], $config['metadata']);
             $handlerRegistry = $container->get(self::getHandlerRegistryId(), [], $config['handlers']);
             $objConstructor  = $container->get(self::getUnserializeObjectConstructorId());
@@ -283,7 +284,7 @@ class Bootstrap implements BootstrapInterface
             );
 
             return new Serializer($jmsSerializer);
-        });
+        }, $definition);
     }
 
     public static function getSerializerId()
