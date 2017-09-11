@@ -28,6 +28,7 @@ use Metadata\MetadataFactory;
 use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
 use yii\di\Container;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use krtv\yii2\serializer\dispatcher\LazyEventDispatcher;
 use krtv\yii2\serializer\handler\LazyHandlerRegistry;
@@ -91,7 +92,7 @@ class Bootstrap implements BootstrapInterface
             throw new InvalidConfigException('Component "serializer" not found. Please make sure that you have it in your config.');
         }
 
-        $definition = array_merge(self::$defaults, $components['serializer']);
+        $definition = ArrayHelper::merge(self::$defaults, $components['serializer']);
 
         $app->set('serializer', $definition);
 
