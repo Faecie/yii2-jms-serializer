@@ -20,6 +20,8 @@ use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\Serializer as JMSSerializer;
 use JMS\Serializer\XmlDeserializationVisitor;
 use JMS\Serializer\XmlSerializationVisitor;
+use krtv\yii2\serializer\Visitor\ArrayDeserializationVisitor;
+use krtv\yii2\serializer\Visitor\ArraySerializationVisitor;
 use Metadata\Cache\FileCache;
 use Metadata\ClassHierarchyMetadata;
 use Metadata\Driver\DriverChain;
@@ -117,6 +119,17 @@ class Bootstrap implements BootstrapInterface
             $namingStrategy  = $container->get(self::getNamingStrategyId(), [], $config['namingStrategy']);
 
             return new JsonDeserializationVisitor($namingStrategy);
+        });
+
+        $container->setSingleton(self::getVisitorId(GraphNavigator::DIRECTION_SERIALIZATION, 'array'), function (Container $container, array $params, array $config) {
+            $namingStrategy  = $container->get(self::getNamingStrategyId(), [], $config['namingStrategy']);
+
+            return new ArraySerializationVisitor($namingStrategy);
+        });
+        $container->setSingleton(self::getVisitorId(GraphNavigator::DIRECTION_DESERIALIZATION, 'array'), function (Container $container, array $params, array $config) {
+            $namingStrategy  = $container->get(self::getNamingStrategyId(), [], $config['namingStrategy']);
+
+            return new ArrayDeserializationVisitor($namingStrategy);
         });
 
         $container->setSingleton(self::getVisitorId(GraphNavigator::DIRECTION_SERIALIZATION, 'xml'), function (Container $container, array $params, array $config) {
